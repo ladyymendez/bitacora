@@ -7,25 +7,44 @@ Robert C. Martin==
 A class follows the OCP if it fulfills these two criteria:
 
 * Open for extension:
-	* Open for extension means that we should be able to add new features or components to the application without breaking existing code.
+	* Means that we should be able to add new features or components to the application without breaking existing code.
 
 * Closed for modification
-	* Closed for modification means that we should not introduce breaking changes to existing functionality, because that would force you to refactor a lot of existing code.
+	* Means that we should not introduce breaking changes to existing functionality, because that would force you to refactor a lot of existing code.
 
 -- [Eric Elliott](https://medium.com/@_ericelliott)
 
+A class is open if you can extend it, produce a subclass and do whatever you want with it—add new methods or fields, override base behavior, etc.
+
 ### Example
 ```
+class Classification {
+  printCaracteristics(Animal) {
+    if(Animal.type=='Carnivores')
+      return 'Print Caracteristics';
+    else
+      return 'Default Caracteristics';
+  }
+}
+
 class Animal {
-  constructor(name, age) {
+  constructor(name, age, type) {
     this.name = name;
     this.age = age;
+    this.type = type;
+    this.classification = new Classification();
   }
   get getName() {
     return this.name;
   }
   set setName(newName) {
     this.name = newName;
+  }
+  set setType(type) {
+    this.type = type;
+  };
+  get getDescription(){
+    return this.classification.printCaracteristics(this);
   }
   onomatopoeia(){}
 }
@@ -44,14 +63,10 @@ class Duck extends Animal {
   }
 }
 
-const dog = new Dog('Doris', 4);
-// console.log(dog.getName)
+const dog = new Dog('Doris', 4, 'Carnivores');
 
-dog.setName = 'Pulgas';
-// console.log(dog.getName)
-
-console.log(dog.onomatopoeia())
+console.log(dog.getDescription);
 ```
-This way we do not need to modify the code whenever a new Animal is required to add. We can just create a class and extends it with the base class.
+If we want create another type of classification in this way we do not need to modify the code whenever a new Animal is required. We can just modify classification without touching any of the Animal class’ code. 
 
 The info was taken from [medium](https://medium.com/@dhkelmendi/solid-principles-made-easy-67b1246bcdf)
